@@ -9,16 +9,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 
+import com.squareup.picasso.Picasso;
 import com.volokh.danylo.video_player_manager.Config;
 import com.volokh.danylo.video_player_manager.manager.PlayerItemChangeListener;
-import com.volokh.danylo.video_player_manager.meta.CurrentItemMetaData;
+import com.volokh.danylo.video_player_manager.manager.SingleVideoPlayerManager;
+import com.volokh.danylo.video_player_manager.manager.VideoPlayerManager;
 import com.volokh.danylo.video_player_manager.meta.MetaData;
 import com.volokh.danylo.videolist.R;
 import com.volokh.danylo.videolist.video_list_demo.adapter.VideoRecyclerViewAdapter;
 import com.volokh.danylo.videolist.video_list_demo.adapter.items.BaseVideoItem;
 import com.volokh.danylo.videolist.video_list_demo.adapter.items.ItemFactory;
-import com.volokh.danylo.video_player_manager.manager.SingleVideoPlayerManager;
-import com.volokh.danylo.video_player_manager.manager.VideoPlayerManager;
 import com.volokh.danylo.visibility_utils.calculator.DefaultSingleItemCalculatorCallback;
 import com.volokh.danylo.visibility_utils.calculator.ListItemsVisibilityCalculator;
 import com.volokh.danylo.visibility_utils.calculator.SingleListViewItemActiveCalculator;
@@ -70,27 +70,9 @@ public class VideoRecyclerViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        try {
-            mList.add(ItemFactory.createItemFromAsset("video_sample_1.mp4", R.drawable.video_sample_1_pic, getActivity(), mVideoPlayerManager));
-            mList.add(ItemFactory.createItemFromAsset("video_sample_2.mp4", R.drawable.video_sample_2_pic, getActivity(), mVideoPlayerManager));
-            mList.add(ItemFactory.createItemFromAsset("video_sample_3.mp4", R.drawable.video_sample_3_pic, getActivity(), mVideoPlayerManager));
-            mList.add(ItemFactory.createItemFromAsset("video_sample_4.mp4", R.drawable.video_sample_4_pic, getActivity(), mVideoPlayerManager));
-
-            mList.add(ItemFactory.createItemFromAsset("video_sample_1.mp4", R.drawable.video_sample_1_pic, getActivity(), mVideoPlayerManager));
-            mList.add(ItemFactory.createItemFromAsset("video_sample_2.mp4", R.drawable.video_sample_2_pic, getActivity(), mVideoPlayerManager));
-            mList.add(ItemFactory.createItemFromAsset("video_sample_3.mp4", R.drawable.video_sample_3_pic, getActivity(), mVideoPlayerManager));
-            mList.add(ItemFactory.createItemFromAsset("video_sample_4.mp4", R.drawable.video_sample_4_pic, getActivity(), mVideoPlayerManager));
-
-            mList.add(ItemFactory.createItemFromAsset("video_sample_1.mp4", R.drawable.video_sample_1_pic, getActivity(), mVideoPlayerManager));
-            mList.add(ItemFactory.createItemFromAsset("video_sample_2.mp4", R.drawable.video_sample_2_pic, getActivity(), mVideoPlayerManager));
-            mList.add(ItemFactory.createItemFromAsset("video_sample_3.mp4", R.drawable.video_sample_3_pic, getActivity(), mVideoPlayerManager));
-            mList.add(ItemFactory.createItemFromAsset("video_sample_4.mp4", R.drawable.video_sample_4_pic, getActivity(), mVideoPlayerManager));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
 
         View rootView = inflater.inflate(R.layout.fragment_video_recycler_view, container, false);
-
+        createFromUrls();
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -108,7 +90,7 @@ public class VideoRecyclerViewFragment extends Fragment {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int scrollState) {
                 mScrollState = scrollState;
-                if(scrollState == RecyclerView.SCROLL_STATE_IDLE && !mList.isEmpty()){
+                if (scrollState == RecyclerView.SCROLL_STATE_IDLE && !mList.isEmpty()) {
 
                     mVideoVisibilityCalculator.onScrollStateIdle(
                             mItemsPositionGetter,
@@ -119,7 +101,7 @@ public class VideoRecyclerViewFragment extends Fragment {
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if(!mList.isEmpty()){
+                if (!mList.isEmpty()) {
                     mVideoVisibilityCalculator.onScroll(
                             mItemsPositionGetter,
                             mLayoutManager.findFirstVisibleItemPosition(),
@@ -136,7 +118,7 @@ public class VideoRecyclerViewFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(!mList.isEmpty()){
+        if (!mList.isEmpty()) {
             // need to call this method from list view handler in order to have filled list
 
             mRecyclerView.post(new Runnable() {
@@ -158,5 +140,46 @@ public class VideoRecyclerViewFragment extends Fragment {
         super.onStop();
         // we have to stop any playback in onStop
         mVideoPlayerManager.resetMediaPlayer();
+    }
+
+
+    public void createFromAssets() {
+        try {
+            mList.add(ItemFactory.createItemFromAsset("video_sample_1.mp4", R.drawable.video_sample_1_pic, getActivity(), mVideoPlayerManager));
+            mList.add(ItemFactory.createItemFromAsset("video_sample_2.mp4", R.drawable.video_sample_2_pic, getActivity(), mVideoPlayerManager));
+            mList.add(ItemFactory.createItemFromAsset("video_sample_3.mp4", R.drawable.video_sample_3_pic, getActivity(), mVideoPlayerManager));
+            mList.add(ItemFactory.createItemFromAsset("video_sample_4.mp4", R.drawable.video_sample_4_pic, getActivity(), mVideoPlayerManager));
+
+            mList.add(ItemFactory.createItemFromAsset("video_sample_1.mp4", R.drawable.video_sample_1_pic, getActivity(), mVideoPlayerManager));
+            mList.add(ItemFactory.createItemFromAsset("video_sample_2.mp4", R.drawable.video_sample_2_pic, getActivity(), mVideoPlayerManager));
+            mList.add(ItemFactory.createItemFromAsset("video_sample_3.mp4", R.drawable.video_sample_3_pic, getActivity(), mVideoPlayerManager));
+            mList.add(ItemFactory.createItemFromAsset("video_sample_4.mp4", R.drawable.video_sample_4_pic, getActivity(), mVideoPlayerManager));
+
+            mList.add(ItemFactory.createItemFromAsset("video_sample_1.mp4", R.drawable.video_sample_1_pic, getActivity(), mVideoPlayerManager));
+            mList.add(ItemFactory.createItemFromAsset("video_sample_2.mp4", R.drawable.video_sample_2_pic, getActivity(), mVideoPlayerManager));
+            mList.add(ItemFactory.createItemFromAsset("video_sample_3.mp4", R.drawable.video_sample_3_pic, getActivity(), mVideoPlayerManager));
+            mList.add(ItemFactory.createItemFromAsset("video_sample_4.mp4", R.drawable.video_sample_4_pic, getActivity(), mVideoPlayerManager));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void createFromUrls() {
+
+        String url = "";
+        try {
+            mList.add(ItemFactory.createItemFromUrl("Video 1", "http://res.wooplr.com/video/upload/v1470834980/content/SmokeyEyes-APP.mp4", mVideoPlayerManager, Picasso.with(getActivity()), R.drawable.video_sample_4_pic));
+            mList.add(ItemFactory.createItemFromUrl("Video 1", "http://res.wooplr.com/video/upload/v1467120805/content/kmqgqgt85kllds3sh66w.mp4", mVideoPlayerManager, Picasso.with(getActivity()), R.drawable.video_sample_4_pic));
+            mList.add(ItemFactory.createItemFromUrl("Video 1", "http://res.wooplr.com/video/upload/v1462435373/content/tyxfuwzmnrzsqbbjt7ns.mp4", mVideoPlayerManager, Picasso.with(getActivity()), R.drawable.video_sample_4_pic));
+            mList.add(ItemFactory.createItemFromUrl("Video 1", "http://res.wooplr.com/video/upload/v1454513615/v/Streetstyle-RopeTwist.mov", mVideoPlayerManager, Picasso.with(getActivity()), R.drawable.video_sample_4_pic));
+            mList.add(ItemFactory.createItemFromUrl("Video 1", "http://res.wooplr.com/video/upload/v1470837065/content/SmokeyEyes-APP-small.mov", mVideoPlayerManager, Picasso.with(getActivity()), R.drawable.video_sample_4_pic));
+            mList.add(ItemFactory.createItemFromUrl("Video 1", "http://res.wooplr.com/video/upload/v1453959239/v/F21_video.mp4", mVideoPlayerManager, Picasso.with(getActivity()), R.drawable.video_sample_4_pic));
+            mList.add(ItemFactory.createItemFromUrl("Video 1", "http://res.wooplr.com/video/upload/v1449307957/test/Epic.webm", mVideoPlayerManager, Picasso.with(getActivity()), R.drawable.video_sample_4_pic));
+            mList.add(ItemFactory.createItemFromUrl("Video 1", "http://res.wooplr.com/video/upload/v1449134617/test/Introducing_Wooplr_-_A_Brand_New_Local_Discovery_App_for_Shopping_Food.webm", mVideoPlayerManager, Picasso.with(getActivity()), R.drawable.video_sample_4_pic));
+
+
+        } catch (Exception e) {
+
+        }
     }
 }
